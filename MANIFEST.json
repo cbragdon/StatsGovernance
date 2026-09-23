@@ -1,0 +1,263 @@
+{
+  "project": "SQL Server Statistics Governance Engine",
+  "version": "1.3.2",
+  "root": "D:\\Projects\\StatsGovernance",
+  "generatedUTC": "2026-09-23T23:14:26.6456981Z",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "87dcdd51d899928d2f31a377528987966c1d2c8ac539c5f81a7a57f98b45cc3a",
+      "size": 9272
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "sha256": "4f14bdad242162c7ca765248b1c0359eef82c9a7b90753ed9b75e7d5c64ed468",
+      "size": 3803
+    },
+    {
+      "path": "docs/CODEX_FIRST_TASK.md",
+      "sha256": "3d758f71264b304d86a33f7e1102dc8b72a0b797c7ed3a751a5f8952d31eafc9",
+      "size": 3222
+    },
+    {
+      "path": "docs/CURRENT_STATE.md",
+      "sha256": "1b9b4e1c9647c82f2cc840a594495b3d2ac2214fd92493e5724bfdd1eb65e0ac",
+      "size": 1755
+    },
+    {
+      "path": "docs/DESIGN_DECISIONS.md",
+      "sha256": "81f99aadf00ee86e163294bf573c598f25f9e2b049621a6b847e6c659fd6430e",
+      "size": 3658
+    },
+    {
+      "path": "docs/DISCREPANCY_REPORT.md",
+      "sha256": "3e65d2d45907690be6c396bb53766fc7e503dea3c517205b29cc5f44456eabfa",
+      "size": 3488
+    },
+    {
+      "path": "docs/KNOWN_DEFECTS.md",
+      "sha256": "77dfaa11f779cd174b93e78ff91edda6ace6b314f18bfe50bca1fa2d952a6e6b",
+      "size": 3118
+    },
+    {
+      "path": "docs/LIVE_SCHEMA_CONTRACT.md",
+      "sha256": "6ce54756347b08825331b202cceb00cd7df9a5d51faf63aa965131ed1c928907",
+      "size": 3703
+    },
+    {
+      "path": "docs/MANUAL_PLATFORM_VALIDATION.md",
+      "sha256": "b6b6669ba5895bafae71a296ff53e463da4319eb9a094f20fa7595fa40f73fce",
+      "size": 4117
+    },
+    {
+      "path": "docs/PLATFORM_COMPATIBILITY.md",
+      "sha256": "0eb32770f5754713ece6dbb3fe7eb0e0d5738fd591789fb4fcc3ced35d1a81a0",
+      "size": 7521
+    },
+    {
+      "path": "docs/QUALIFICATION_20260923.md",
+      "sha256": "1ae00ba8f0b98b6215a670ad9b59ece7e3723f244734021ab3249428296ee840",
+      "size": 4447
+    },
+    {
+      "path": "docs/RELEASE_HISTORY.md",
+      "sha256": "4ade73fa5f3d50ba5cf4405b249481ce9a5cdc9a4e3ee866df5c25a5edfc194e",
+      "size": 3233
+    },
+    {
+      "path": "docs/TEST_PLAN.md",
+      "sha256": "03fb416d827d84d13ecd80e4f5a1e3729ba513a83ca60cb65634043ba41f5ec2",
+      "size": 5134
+    },
+    {
+      "path": "README.md",
+      "sha256": "9a8e4a890f55420eb046c9d708ff0eb74d26f908c2b46665fd2f671b122e0016",
+      "size": 1956
+    },
+    {
+      "path": "scripts/00_ReadOnly_Live_Inventory.sql",
+      "sha256": "ec1d11630ae049d87d0b3720f067941fa76333e44dbe3a35eff1f055a3b706cd",
+      "size": 16673
+    },
+    {
+      "path": "scripts/01_Export_Live_ReadOnly.ps1",
+      "sha256": "d531b942c9b045b78805cc54a33b7ad40a775def04eec1bdf32a40abdcc1d35a",
+      "size": 2914
+    },
+    {
+      "path": "scripts/02_Local_SQL_Runner.ps1",
+      "sha256": "19eb99daf4d4e77786551e103dedd8cfc69d6f3075848510bf7742e90a420a92",
+      "size": 2339
+    },
+    {
+      "path": "scripts/03_Phase7_ReadOnly.sql",
+      "sha256": "abfb8caaa9018ca0253a7782306c6838b0541a48985be9f086538c71a79bf77d",
+      "size": 2196
+    },
+    {
+      "path": "src/.gitkeep",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "src/functions/dbo.ufn_DRE_StatsCapabilities_v1.sql",
+      "sha256": "acda80795666a215f6666c872f19cea58ff0c2c5ab366339208a1ad857757dd1",
+      "size": 3705
+    },
+    {
+      "path": "src/functions/dbo.ufn_DRE_StatsCommand_v1.sql",
+      "sha256": "05fabcd564c5b7fc97ccc0ab92cff74944b0d0c15280240e3040934b72d2500c",
+      "size": 2671
+    },
+    {
+      "path": "src/functions/dbo.ufn_DRE_StatsDecision_v1.sql",
+      "sha256": "02c424688dca87e2f7902c2105f4c51c86683f9ee7023b75e905072fea0e2b33",
+      "size": 19677
+    },
+    {
+      "path": "src/installer/01_Tables.sql",
+      "sha256": "cd789394df5b4f36599782c09fb4c8aeb0b58bf338a4b9c44f5085a835d1e822",
+      "size": 12507
+    },
+    {
+      "path": "src/installer/Install_v1.3.2.sql",
+      "sha256": "6d4678c345188d28d5a6be9e2a2588c16a451820c18af7c1105c357734164fea",
+      "size": 180491
+    },
+    {
+      "path": "src/procedures/dbo.usp_DRE_SetStatsDatabaseScope_v1.sql",
+      "sha256": "3ce4b23cc3f03d3b799b01b45e837bcfebcfcc689a637f606bbc6f4fe1505a79",
+      "size": 5140
+    },
+    {
+      "path": "src/procedures/dbo.usp_DRE_StatsCapabilities_v1.sql",
+      "sha256": "2d0da3ee083d7589e12bc71d8bcfa5e0eb77c706674f89f755669d80003e65bb",
+      "size": 3596
+    },
+    {
+      "path": "src/procedures/dbo.usp_DRE_StatsCheckDatabaseGate_v1.sql",
+      "sha256": "5f3f79762db879d94bcb5da1aa9f1b95fd4fc8c0115f4f4364065d8c533b46ef",
+      "size": 3484
+    },
+    {
+      "path": "src/procedures/dbo.usp_DRE_StatsCollect_v1.sql",
+      "sha256": "e10eb10415915d1ebf16540840c7f214e4b51b077c342ce1ed1983d7889cc7ae",
+      "size": 23138
+    },
+    {
+      "path": "src/procedures/dbo.usp_DRE_StatsDatabaseSelection_v1.sql",
+      "sha256": "ec10dc1a600ecc26e522463e3c056152b7bb9addab08d3674e0ed4fd9ef1cf83",
+      "size": 4911
+    },
+    {
+      "path": "src/procedures/dbo.usp_DRE_StatsGovernance_v1.sql",
+      "sha256": "8cd77cf5d6b74b93d1c6920df25619e9af6d505b72dfd392d91ee58c9b8aaa1c",
+      "size": 3424
+    },
+    {
+      "path": "src/procedures/dbo.usp_DRE_StatsGovernanceTargeted_v1.sql",
+      "sha256": "eb25a5924592410b0d44a1efb896c1f2344311d8899087d8aee1e31aed2b9933",
+      "size": 10418
+    },
+    {
+      "path": "src/procedures/dbo.usp_DRE_StatsGovernanceWorker_v1.sql",
+      "sha256": "b1c0de594fd0d9ee21dac74f659a5204e12895ec59a1e2ec1153e41963925d96",
+      "size": 40410
+    },
+    {
+      "path": "src/procedures/dbo.usp_DRE_StatsOverride_v1.sql",
+      "sha256": "ccc5aacf165bfe835177c676bc238b23f35b87c273e98718a20ca0e86de9de6b",
+      "size": 1180
+    },
+    {
+      "path": "src/procedures/dbo.usp_DRE_StatsScopeLookup_v1.sql",
+      "sha256": "37c36a07954374772b5f317e9b33555a2f0e4201b66fffafb8a104e56ceed705",
+      "size": 2730
+    },
+    {
+      "path": "src/triggers/dbo.tr_DRE_StatsScopeAudit_v1.sql",
+      "sha256": "d72f0c75ed619f5c892b9677d8d8427b1be0a6bb54ddd4194f8c988c1e1cb82c",
+      "size": 1580
+    },
+    {
+      "path": "src/views/dbo.v_DRE_StatsColumnstoreHealth_v1.sql",
+      "sha256": "04ea6308d655142121f0a2bdf90e9104053e42c3f281985dc1f1c5cde25c554e",
+      "size": 1224
+    },
+    {
+      "path": "src/views/dbo.v_DRE_StatsDatabaseContext_v1.sql",
+      "sha256": "6cb6281fe7edcfd3fb9daa95e180f2b3f48e060cd27985d8932236f1ae07ea1d",
+      "size": 4688
+    },
+    {
+      "path": "src/views/dbo.v_DRE_StatsDatabaseSelection_v1.sql",
+      "sha256": "58b34fe4babc8224032c7cf681c760c7e133ed40dd9e45fedc4fba3addeeba11",
+      "size": 1636
+    },
+    {
+      "path": "src/views/dbo.v_DRE_StatsGovernanceResults_v1.sql",
+      "sha256": "57a35cb87326391d2acac87e0c955af1771e44e693d60d0a260e0b49027598fe",
+      "size": 15183
+    },
+    {
+      "path": "src/views/dbo.v_DRE_StatsScopeConfiguration_v1.sql",
+      "sha256": "2e1a2ba518baea5a3255c8d36103255b47b0c842a272289e17e249e9766638ab",
+      "size": 812
+    },
+    {
+      "path": "tests/.gitkeep",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "tests/contract/01_Tables.sql",
+      "sha256": "1c4329ec0e8ac377008cb1f09e17d70b01d1e5874cba0b5cddf80c1b9f049da2",
+      "size": 12138
+    },
+    {
+      "path": "tests/contract/02_Modules.sql",
+      "sha256": "1db19440b42826eb8ed5332edd8b5ad44783cd8d4ab0418bb1e761e3ea34eafc",
+      "size": 5084
+    },
+    {
+      "path": "tests/execution/01_Setup_Lab.sql",
+      "sha256": "20baba4a3532e8c5bfece9796349785f8771fc5ba85c635af0a0fd4a83dfd10f",
+      "size": 3290
+    },
+    {
+      "path": "tests/execution/02_Recommend_Lab.sql",
+      "sha256": "2a339787f8cad3cb9316e17beafb71719165d5df7fe900041a7e5ccce62e6c92",
+      "size": 1927
+    },
+    {
+      "path": "tests/execution/03_Enforce_Lab.sql",
+      "sha256": "712e4221084974015baaae683a2d9173ba4d3e1e2d0f6c7b78d69ca0602b9ed8",
+      "size": 2808
+    },
+    {
+      "path": "tests/execution/04_Cleanup_Lab.sql",
+      "sha256": "b481495219fa3e0eda128b275db94991780b954cf3daa1b218a8f652038c9902",
+      "size": 1861
+    },
+    {
+      "path": "tests/execution/05_Compatibility_Lab.sql",
+      "sha256": "508ac81df2b358745053c5309fbfa9c6bf98c3343595a1f7b05de1516d196eb7",
+      "size": 3675
+    },
+    {
+      "path": "tests/policy/01_Report_Only_Smoke.sql",
+      "sha256": "693be837e9f452ced0aedd25a12d01af3f251fad698a899bd8285d74316f916a",
+      "size": 1227
+    },
+    {
+      "path": "tests/policy/02_Decision_Matrix.sql",
+      "sha256": "3ef50cf77336f60224adfecc50bef3eb20a6635ca584773c46d76728ad847113",
+      "size": 4055
+    },
+    {
+      "path": "tests/policy/03_Capability_Matrix.sql",
+      "sha256": "5d594e27522aa532def5f6d2da637874c3a03d76eaf73ff24dce666bbb46c64d",
+      "size": 2239
+    }
+  ]
+}

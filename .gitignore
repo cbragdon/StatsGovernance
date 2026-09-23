@@ -1,0 +1,17 @@
+# Local SQL execution queue and captured output
+artifacts/sql_queue/
+
+# Machine-specific live inventory exports
+artifacts/live_inventory_*/
+
+# PowerShell and editor temporary files
+*.tmp
+*.bak
+*.user
+*.suo
+.vs/
+.vscode/
+
+# Operating-system metadata
+Thumbs.db
+.DS_Store
