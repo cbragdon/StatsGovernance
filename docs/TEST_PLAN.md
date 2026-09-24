@@ -32,6 +32,8 @@ Contract checks must include:
 - CommandLog shape,
 - object definitions/hashes where useful.
 
+`tests/contract/00_CommandLog.sql` validates the 16 required columns, types, lengths, nullability, identity property, and clustered primary key. `tests/execution/07_CommandLog_Bootstrap.sql` creates a compatibility-level-110 disposable utility database without `dbo.CommandLog`, installs twice, verifies automatic creation and object preservation, runs the remaining contracts, and removes the database.
+
 Contract tests are read-only.
 
 A contract mismatch stops qualification before DDL/DML.

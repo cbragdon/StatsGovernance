@@ -43,7 +43,7 @@ The installed code identifies itself as v1.3.1. The settings table reports schem
 
 ## CommandLog
 
-`DBAdmin.dbo.CommandLog` exists with the 16 project-used columns in the documented order. `Command` and `CommandType` are NOT NULL. `IndexType` is nullable `tinyint`. The project must preserve this table's schema.
+The selected utility database contains `dbo.CommandLog` with the 16 project-used columns in the documented order. `Command` and `CommandType` are NOT NULL. `IndexType` is nullable `tinyint`. The installer creates this standard schema when absent and must preserve an existing compatible table and its rows.
 
 ## Phase 7 evidence
 

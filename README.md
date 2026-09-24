@@ -15,7 +15,7 @@ powershell.exe -ExecutionPolicy Bypass -File D:\Projects\StatsGovernance\scripts
 
 The wrapper uses Windows Authentication, passes the selected database to `sqlcmd -d`, enables quoted identifiers, and returns a failure when SQL Server reports an error. `-TrustServerCertificate` adds `-C` for a server certificate that the workstation does not trust. Omit that switch when normal certificate validation should apply.
 
-The selected utility database must already exist at compatibility level 110 or higher. An Ola-compatible `dbo.CommandLog` must also exist in that database. The installer validates that table and never changes it. It creates the governance objects described below and makes no instance-level changes or changes in target databases.
+The selected utility database must already exist at compatibility level 110 or higher. If `dbo.CommandLog` is absent, the installer creates the standard Ola-compatible table in that database. If it already exists, the installer validates its required schema and preserves the table and its rows. It creates the remaining governance objects described below and makes no instance-level changes or changes in target databases.
 
 ### Direct SQLCMD installation
 
@@ -25,7 +25,7 @@ The SQL installer contains no `USE` statement. It installs into the connection's
 sqlcmd -S localhost -E -C -I -d DBAUtility -b -i D:\Projects\StatsGovernance\src\installer\Install_v1.3.2.sql
 ```
 
-The installed procedures, functions, views, trigger, and governance tables use local two-part names. Put the compatible `dbo.CommandLog` in the same utility database. The repository's examples use `DBAdmin`; substitute the chosen database in three-part names. The installer is rerunnable.
+The installed procedures, functions, views, trigger, and governance tables use local two-part names. `dbo.CommandLog` is created in that same utility database when absent. The repository's examples use `DBAdmin`; substitute the chosen database in three-part names. The installer is rerunnable.
 
 ## What is installed in the utility database
 
@@ -35,6 +35,7 @@ The selected utility database centralizes policy, approvals, telemetry, and exec
 
 | Object | Purpose |
 | --- | --- |
+| `dbo.CommandLog` | Standard Ola-compatible execution log. Created only when absent; an existing compatible table and its rows are preserved. |
 | `dbo.StatsGovernanceSettings` | The singleton policy row. Installed defaults include a 10 percent change threshold, 500 minimum modifications, a 60 minute cooldown, and a 5 second lock timeout. |
 | `dbo.StatsGovernanceScope` | Persistent database exclusions and enforcement approvals, including who made the decision, when, and why. |
 | `dbo.StatsGovernanceScopeAudit` | The before-and-after history produced for every scope insert, update, or delete. |
@@ -56,7 +57,7 @@ The installer also creates the keys, indexes, defaults, and check constraints th
 | Reporting views | `dbo.v_DRE_StatsGovernanceResults_v1`, `dbo.v_DRE_StatsDatabaseSelection_v1`, `dbo.v_DRE_StatsDatabaseContext_v1`, `dbo.v_DRE_StatsScopeConfiguration_v1`, and `dbo.v_DRE_StatsColumnstoreHealth_v1`. |
 | Audit trigger | `dbo.tr_DRE_StatsScopeAudit_v1` records scope changes and prevents a scope key from being renamed in place. |
 
-`dbo.CommandLog` is a prerequisite rather than a project-owned object. Only `ENFORCE` writes to it, using one row per attempted statistic. The engine retains the inserted `CommandLog.ID` so completion and error details update the exact row.
+`dbo.CommandLog` follows the standard Ola Hallengren schema. The installer creates it only when absent; an existing compatible table and its history are retained. Only `ENFORCE` writes execution rows, using one row per attempted statistic. The engine retains the inserted `CommandLog.ID` so completion and error details update the exact row.
 
 ## Database selection and exclusions
 

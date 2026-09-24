@@ -76,6 +76,7 @@ The subsequent platform-documentation audit expanded the build-boundary tests an
 - Added selection and last-moment gates for local Always On secondary replicas.
 - Added database-selection contracts and a system-database report-only smoke test.
 - Verified a fresh install in an arbitrarily named disposable utility database and reran the policy, compatibility-level 110–170, CE 70, and context-independent lab tests.
+- Added transactional creation of the standard Ola-compatible `dbo.CommandLog` when absent, with strict validation and preservation when present.
 
 No new `ENFORCE` test was run for this update. The prior dedicated-lab execution evidence remains the current enforcement qualification.
 

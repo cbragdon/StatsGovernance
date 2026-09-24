@@ -2,17 +2,17 @@
   "project": "SQL Server Statistics Governance Engine",
   "version": "1.3.2",
   "root": "D:\\Projects\\StatsGovernance",
-  "generatedUTC": "2026-09-24T12:37:57.7784921Z",
+  "generatedUTC": "2026-09-24T18:09:28.8204187Z",
   "files": [
     {
       "path": "AGENTS.md",
-      "sha256": "b30e27016a9aacdb9698496b9820d5769f772771ebdb79a59ccf4fb2784f1f0c",
-      "size": 9853
+      "sha256": "089763641ab13ffd2a810551e7e84e1909384cd3d4e48231c564a8c50bad51ea",
+      "size": 9960
     },
     {
       "path": "docs/ARCHITECTURE.md",
-      "sha256": "9f464d521e721756846cf512aea0414c2e9e1fdb106380219dcc126675e735b0",
-      "size": 4009
+      "sha256": "e155a520bd879c0e9ebfbf31f9989f9f6dc2a85a617b93be8d7b53f49b4dc1e3",
+      "size": 4298
     },
     {
       "path": "docs/CODEX_FIRST_TASK.md",
@@ -21,13 +21,13 @@
     },
     {
       "path": "docs/CURRENT_STATE.md",
-      "sha256": "d7d443c3b6ad56be4a9a3be9fc42ef41d6ac037d9563bde29eb898db849b0e4e",
-      "size": 2672
+      "sha256": "2e84d17162bb26fd6e18c77c0608fdb2599daeb62cdbd50c5ccf941d191d8775",
+      "size": 3083
     },
     {
       "path": "docs/DESIGN_DECISIONS.md",
-      "sha256": "9add0f8a571060b00fbd48f53f4467d11221ab44ec5e9ffd13cf5a298d96a9a4",
-      "size": 4673
+      "sha256": "82c60a7bfec756caccf23bdf2b0ed45724a705d074986e3259579d3fc3f509a4",
+      "size": 4801
     },
     {
       "path": "docs/DISCREPANCY_REPORT.md",
@@ -41,13 +41,13 @@
     },
     {
       "path": "docs/LIVE_SCHEMA_CONTRACT.md",
-      "sha256": "6ce54756347b08825331b202cceb00cd7df9a5d51faf63aa965131ed1c928907",
-      "size": 3703
+      "sha256": "0a6475c5d246617706083b44ded9955c42f173be3dc75158ad5a5456947e3437",
+      "size": 3796
     },
     {
       "path": "docs/MANUAL_PLATFORM_VALIDATION.md",
-      "sha256": "e3dc2d72d7bd7fa55eed458ae637daea48c84ec74fdc7f804a0020a3ee66caac",
-      "size": 4714
+      "sha256": "85853e956c0c56953b66f4c66c07cb9513e5e21fcf7843c0910bdfa02c80038f",
+      "size": 4917
     },
     {
       "path": "docs/PLATFORM_COMPATIBILITY.md",
@@ -61,23 +61,23 @@
     },
     {
       "path": "docs/QUALIFICATION_20260924.md",
-      "sha256": "c29ee26f897e80deab9f93407e247c1cf89b3c17213e45c46e15187ec7249b9e",
-      "size": 3115
+      "sha256": "cb99e5cab1e190d21d5cf36e30eb13351fa8ffbab2cc46ad741382fa367c746d",
+      "size": 3829
     },
     {
       "path": "docs/RELEASE_HISTORY.md",
-      "sha256": "af12853b4c6f399eff93f929f38043fabb7fdfda61807f3cfc6d62f6190c3ca7",
-      "size": 4275
+      "sha256": "e6362777e4fba365a02e5e8fe135d54f7b5f22f620c81b10bc57df1a9dca60a9",
+      "size": 4421
     },
     {
       "path": "docs/TEST_PLAN.md",
-      "sha256": "b77b2be91de21450387980eca4a303186db328174a7ff1fb061f18df4c5f97eb",
-      "size": 5622
+      "sha256": "4b3c181ebfbdec000c63c7275d1840d265314b3d96ae9bca28e7fe60f64c2c26",
+      "size": 6027
     },
     {
       "path": "README.md",
-      "sha256": "38e3f1ef0513a9774efa7287f5850a7cff7d90b9474d702854e99e1a659da353",
-      "size": 12677
+      "sha256": "ff27d95a0ae939f3d52d5664d9e634e23283ed84c221219cc9e736fefee68b73",
+      "size": 13021
     },
     {
       "path": "scripts/00_Install.ps1",
@@ -126,13 +126,13 @@
     },
     {
       "path": "src/installer/01_Tables.sql",
-      "sha256": "03fe7c0de17545a484c5df61c6485d961a4a0591fa994f7f189e3ce99c228c1e",
-      "size": 12490
+      "sha256": "82c3489c61c79381e636966faf2f0e87cb3193935e3eceadca27e61ed4579740",
+      "size": 15235
     },
     {
       "path": "src/installer/Install_v1.3.2.sql",
-      "sha256": "5aa2e257398333149c913d2f270304b434264529185b6708ffc544726acfcf71",
-      "size": 182597
+      "sha256": "18926b4aac1206e0af1f7e1f999d46aa2166840902c07bf3e2c821b34710e6c5",
+      "size": 184948
     },
     {
       "path": "src/procedures/dbo.usp_DRE_SetStatsDatabaseScope_v1.sql",
@@ -220,6 +220,11 @@
       "size": 0
     },
     {
+      "path": "tests/contract/00_CommandLog.sql",
+      "sha256": "c85f8c4ce551abf00b1872720a869bfb375d10a5a27396248d7faaeba05d262f",
+      "size": 2145
+    },
+    {
       "path": "tests/contract/01_Tables.sql",
       "sha256": "651a91ddc5fbe83357568cb916cd8400b0a39541544b90cfccb628e036753299",
       "size": 12121
@@ -263,6 +268,11 @@
       "path": "tests/execution/06_Cleanup_Compatibility_Lab.sql",
       "sha256": "f8a0daa44e1054b373586d9140c6adbf172f9f07afd064ef2105e9acf53fd179",
       "size": 290
+    },
+    {
+      "path": "tests/execution/07_CommandLog_Bootstrap.sql",
+      "sha256": "0e799fdb7ca35ae5ff41166bdd71f175d5e3c4723a232d018526b4e79034b6c2",
+      "size": 1864
     },
     {
       "path": "tests/policy/01_Report_Only_Smoke.sql",

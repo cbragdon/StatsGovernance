@@ -34,7 +34,7 @@ The integrated v1.3.2 build is installed on the local SQL Server 2025 instance. 
 
 ## Hard requirements
 
-1. Never change the utility database's `dbo.CommandLog` schema.
+1. Create the standard Ola-compatible `dbo.CommandLog` when absent; validate and never alter an existing table.
 2. Only `ENFORCE` may write the utility database's `dbo.CommandLog`.
 3. `OBSERVE` and `RECOMMEND` must not perform statistics maintenance.
 4. Do not run `ENFORCE` against business tables without explicit user approval.
@@ -115,7 +115,7 @@ When `@Tables` is supplied:
 
 ## CommandLog contract
 
-Use the existing Ola Hallengren-compatible `dbo.CommandLog` table in the selected utility database.
+Use the Ola Hallengren-compatible `dbo.CommandLog` table in the selected utility database. The installer creates it when absent and preserves it when present.
 
 Columns used by this project:
 

@@ -6,6 +6,7 @@
 - SQL Server: 2025 CU8, `17.0.4085.5`
 - Utility database used for installed-engine tests: `DBAdmin`
 - Alternate utility database used for fresh-install testing: `StatsGovCustomUtilityV132`
+- CommandLog bootstrap database (compatibility 110, created and removed): `StatsGovCommandLogBootstrapV132`
 - Authentication: Windows Authentication through the existing local SQL runner
 
 ## Changes under test
@@ -17,6 +18,7 @@
 - Exclusions: `tempdb`, `SSISDB`, replication distribution databases, snapshots, unavailable databases, and local Always On secondary replicas.
 - Microsoft-shipped tables are visible in supported system databases.
 - Always On primary state is checked during selection and again before work.
+- A missing `dbo.CommandLog` is created with the standard Ola-compatible schema; an existing compatible table and its rows are preserved.
 
 ## Executed evidence
 
@@ -30,6 +32,8 @@
 | `071_Context_Compatibility_Lab` | Exit 0 | Compatibility levels 110, 120, 130, 140, 150, 160, and 170 passed; CE 70 context passed. |
 | `072_Compatibility_Lab_Cleanup` | Exit 0 | Disposable compatibility database removed. |
 | `073_AlwaysOn_Selection_Contract` | Exit 0 | Reinstalled the final modules and passed the expanded database-selection contract. The contract conditionally verifies explicit distribution-database rejection and explicit Always On secondary blocking when those database types exist. |
+| `079_CommandLog_Bootstrap_Compat110` | Exit 0 | Created a compatibility-level-110 utility database with no `dbo.CommandLog`; the installer created the table, passed its contract, preserved the same object through a rerun, passed all remaining contracts, and removed the disposable database. |
+| `078_Existing_CommandLog_Preserve` | Exit 0 | Reinstalled in `DBAdmin`; the existing `dbo.CommandLog` retained the same object identity, creation date, and all 10 rows. |
 
 All job `stderr.txt` files were empty.
 

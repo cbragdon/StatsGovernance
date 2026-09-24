@@ -20,13 +20,13 @@ Managed Instance reports `EngineEdition = 8`. Its reported `ProductVersion` may 
 
 ## 2. Install and check contracts
 
-Prerequisites: the selected utility database exists, its compatibility level is at least 110, and its existing Ola-compatible `dbo.CommandLog` is present. The installer checks this table and does not alter it. The installer contains no `USE` statement and installs into the connection database selected with `-d`. Example for Windows Authentication:
+Prerequisites: the selected utility database exists and its compatibility level is at least 110. The installer creates an Ola-compatible `dbo.CommandLog` when absent. It validates and preserves an existing table. The installer contains no `USE` statement and installs into the connection database selected with `-d`. Example for Windows Authentication:
 
 ```powershell
 powershell.exe -ExecutionPolicy Bypass -File D:\Projects\StatsGovernance\scripts\00_Install.ps1 -Server <server> -Database <utility_database>
 ```
 
-For a self-signed certificate, add `-TrustServerCertificate`; use the connection and authentication method required by the target environment. A successful install prints `TABLE_CONTRACT_PASS` and `STATS_GOVERNANCE_V1_3_2_INSTALL_COMPLETE`. Then run `tests/contract/01_Tables.sql`, `02_Modules.sql`, and `03_Database_Selection.sql` with `sqlcmd -d <utility_database>`; all must exit zero and print their `*_PASS` markers. Re-run the installer once to check idempotence.
+For a self-signed certificate, add `-TrustServerCertificate`; use the connection and authentication method required by the target environment. A successful install prints `TABLE_CONTRACT_PASS` and `STATS_GOVERNANCE_V1_3_2_INSTALL_COMPLETE`. Then run `tests/contract/00_CommandLog.sql`, `01_Tables.sql`, `02_Modules.sql`, and `03_Database_Selection.sql` with `sqlcmd -d <utility_database>`; all must exit zero and print their `*_PASS` markers. Re-run the installer once to check idempotence. Where database creation and deletion are allowed, run `tests/execution/07_CommandLog_Bootstrap.sql` in SQLCMD mode to qualify automatic creation in a disposable utility database.
 
 ## 3. Run read-only and policy checks
 

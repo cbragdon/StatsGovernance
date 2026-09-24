@@ -106,7 +106,7 @@ Database:
 The caller-selected utility database; DBAdmin is the project default.
 ```
 
-Do not modify the existing CommandLog table schema.
+Create the standard Ola-compatible CommandLog table when absent. Validate and do not modify an existing CommandLog table or its rows.
 
 Report-only modes must not insert CommandLog rows.
 
@@ -114,7 +114,7 @@ Report-only modes must not insert CommandLog rows.
 
 The installer contains no `USE` statement. The automation supplies the utility database as the connection's initial catalog, and every project-owned object uses local two-part names.
 
-The chosen database must already exist at compatibility level 110 or higher and contain the compatible `dbo.CommandLog` prerequisite.
+The chosen database must already exist at compatibility level 110 or higher. The installer creates the compatible `dbo.CommandLog` table when absent and validates it when present.
 
 ## Database groups and exclusions
 

@@ -24,6 +24,8 @@ Execute only actions that pass all eligibility, capability, scope, policy, and s
 
 Only ENFORCE may write execution rows to `dbo.CommandLog` in the selected utility database.
 
+During installation, the engine creates the standard Ola-compatible `dbo.CommandLog` table when it is absent. If the table already exists, installation validates its required columns, nullability, identity, and clustered primary key without replacing the table or changing retained rows.
+
 ## Decision separation
 
 The architecture deliberately separates three questions:
