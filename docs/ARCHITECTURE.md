@@ -22,7 +22,7 @@ Evaluate the policy engine and produce proposed actions/commands without executi
 
 Execute only actions that pass all eligibility, capability, scope, policy, and safety gates.
 
-Only ENFORCE may write execution rows to `DBAdmin.dbo.CommandLog`.
+Only ENFORCE may write execution rows to `dbo.CommandLog` in the selected utility database.
 
 ## Decision separation
 
@@ -144,6 +144,8 @@ ENFORCE must be protected by:
 - object-existence checks,
 - dedicated error capture,
 - deterministic CommandLog correlation.
+- rejection of `tempdb`, `SSISDB`, and replication distribution databases,
+- local-primary validation for Always On availability databases at selection and immediately before work.
 
 ## Collation
 

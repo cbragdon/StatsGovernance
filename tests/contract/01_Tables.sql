@@ -1,6 +1,5 @@
 /* Exact permanent-table column contract captured from the live 1.3.0 schema.
    Run read-only before an upgrade and after a new installation. */
-USE [DBAdmin];
 SET NOCOUNT ON;
 SET QUOTED_IDENTIFIER ON;
 DECLARE @Expected TABLE

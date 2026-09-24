@@ -7,7 +7,7 @@ This repository contains the SQL Server Statistics Governance Engine project.
 Primary development/test instance:
 
 - SQL Server instance: `DESKTOP-6BVBI90`
-- Administrative database: `DBAdmin`
+- Default administrative database: `DBAdmin`; installation must also work in any caller-selected utility database.
 - Test database: `AdventureWorks2019`
 - Authentication: Windows Authentication
 - Do not store credentials in this repository.
@@ -34,8 +34,8 @@ The integrated v1.3.2 build is installed on the local SQL Server 2025 instance. 
 
 ## Hard requirements
 
-1. Never change `DBAdmin.dbo.CommandLog` schema.
-2. Only `ENFORCE` may write `DBAdmin.dbo.CommandLog`.
+1. Never change the utility database's `dbo.CommandLog` schema.
+2. Only `ENFORCE` may write the utility database's `dbo.CommandLog`.
 3. `OBSERVE` and `RECOMMEND` must not perform statistics maintenance.
 4. Do not run `ENFORCE` against business tables without explicit user approval.
 5. Controlled `ENFORCE` testing must use dedicated lab objects.
@@ -59,10 +59,14 @@ The integrated v1.3.2 build is installed on the local SQL Server 2025 instance. 
 23. Declare nullability explicitly in permanent tables, temp tables, and table variables.
 24. Serialize `rowversion`/`binary` values to textual/XML form with `sys.fn_varbintohexstr()` unless a different binary-safe representation is explicitly required.
 25. Never claim a runtime test passed unless Codex actually executed it against the target SQL Server and checked the result.
+26. Installer and utility SQL scripts must use the caller-selected connection database; do not hardcode `USE [DBAdmin]`.
+27. Supported system database targets are `master`, `model`, and `msdb`.
+28. Never select or approve `tempdb`, `SSISDB`, or a replication distribution database.
+29. Never process a database on a local Always On secondary replica; check at selection and revalidate before work.
 
 ## Public procedure contracts
 
-`DBAdmin.dbo.usp_DRE_StatsGovernance_v1` must retain exactly these ten public parameters:
+`dbo.usp_DRE_StatsGovernance_v1` in the selected utility database must retain exactly these ten public parameters:
 
 ```sql
 @Databases
@@ -77,7 +81,7 @@ The integrated v1.3.2 build is installed on the local SQL Server 2025 instance. 
 @LegacyCEMultiplier = 2.0
 ```
 
-`DBAdmin.dbo.usp_DRE_StatsGovernanceTargeted_v1` must retain exactly these eight public parameters:
+`dbo.usp_DRE_StatsGovernanceTargeted_v1` in the selected utility database must retain exactly these eight public parameters:
 
 ```sql
 @Databases nvarchar(max)
@@ -111,7 +115,7 @@ When `@Tables` is supplied:
 
 ## CommandLog contract
 
-Use the existing Ola Hallengren-compatible `DBAdmin.dbo.CommandLog` table.
+Use the existing Ola Hallengren-compatible `dbo.CommandLog` table in the selected utility database.
 
 Columns used by this project:
 

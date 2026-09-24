@@ -9,3 +9,9 @@ The temporary `AdventureWorks2019` approval, overrides, and lab table were remov
 Remaining qualification: run the same installer and relevant suites on actual SQL Server 2016, 2017, 2019, 2022, and Azure SQL Managed Instance targets. Those environments are not available through the current `localhost` connection, so no runtime-pass claim is made for them.
 
 The code has undergone a separate Microsoft-documentation review for those platforms; see `PLATFORM_COMPATIBILITY.md`. Runtime checks on the closed-off environments belong to the user, using `MANUAL_PLATFORM_VALIDATION.md`.
+
+## 2026-09-24 portability and selection update
+
+The installer and utility SQL scripts now use the caller-selected connection database and contain no hardcoded `USE [DBAdmin]`. `scripts/00_Install.ps1` accepts the utility database name and passes it to `sqlcmd -d`. A fresh installation in disposable database `StatsGovCustomUtilityV132` passed the table, module, and database-selection contracts without modifying the install script; the database was removed afterward.
+
+Database selection now supports `SYSTEM_DATABASES`, `USER_DATABASES`, and `ALL`. Supported system targets are `master`, `model`, and `msdb`, including Microsoft-shipped tables. `tempdb`, `SSISDB`, replication distribution databases, and local Always On secondary replicas are blocked. The local `SYSTEM_DATABASES` OBSERVE run completed with RunID `1ABACF74-E68A-40AA-8FA8-6FD25A28A6D6` and no CommandLog writes. See `QUALIFICATION_20260924.md`.

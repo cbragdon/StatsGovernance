@@ -51,8 +51,8 @@ BEGIN
     DECLARE @TargetTablesXml xml=NULL,@ResolvedDatabase sysname=NULL;
     IF @Tables IS NOT NULL
     BEGIN
-        IF UPPER(@Databases)='ALL'
-            THROW 51130, 'When @Tables is supplied, @Databases must name exactly one database; ALL is not allowed.',1;
+        IF UPPER(@Databases) IN ('ALL','SYSTEM_DATABASES','USER_DATABASES')
+            THROW 51130, 'When @Tables is supplied, @Databases must name exactly one database; database-group selectors are not allowed.',1;
 
         DECLARE @SelectionXml xml;
         EXEC dbo.usp_DRE_StatsDatabaseSelection_v1
@@ -126,7 +126,7 @@ WHERE NOT EXISTS
     SELECT 1
     FROM sys.tables AS t
     JOIN sys.schemas AS s ON s.schema_id=t.schema_id
-    WHERE t.is_ms_shipped=0 AND t.is_external=0
+    WHERE (t.is_ms_shipped=0 OR DB_ID() IN (1,3,4)) AND t.is_external=0
       AND s.name COLLATE DATABASE_DEFAULT=r.SchemaName COLLATE DATABASE_DEFAULT
       AND t.name COLLATE DATABASE_DEFAULT=r.TableName COLLATE DATABASE_DEFAULT
 );
@@ -137,7 +137,7 @@ JOIN sys.schemas AS s ON s.schema_id=t.schema_id
 JOIN #RequestedTargets AS r
   ON s.name COLLATE DATABASE_DEFAULT=r.SchemaName COLLATE DATABASE_DEFAULT
  AND t.name COLLATE DATABASE_DEFAULT=r.TableName COLLATE DATABASE_DEFAULT
-WHERE t.is_ms_shipped=0 AND t.is_external=0;';
+WHERE (t.is_ms_shipped=0 OR DB_ID() IN (1,3,4)) AND t.is_external=0;';
         EXEC sys.sp_executesql @ResolveSql;
 
         IF EXISTS(SELECT 1 FROM #MissingTargets)

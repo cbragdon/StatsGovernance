@@ -1,4 +1,3 @@
-USE [DBAdmin];
 SET NOCOUNT ON;
 
 DECLARE @Cases TABLE

@@ -22,10 +22,12 @@ BEGIN
         ELSE IF @Mode='ENFORCE' AND ISNULL(@Scope.value('(/Scope/EnabledForEnforcement/text())[1]','bit'),0)<>1
             SELECT @Status='APPROVAL_REVOKED',@GateReason='DATABASE_NOT_APPROVED',
                    @Error=51040,@Message=N'Database approval was revoked; remaining work was skipped.';
-        ELSE IF NOT EXISTS(SELECT 1 FROM sys.databases WHERE database_id=@ExpectedID AND state=0
-            AND source_database_id IS NULL AND HAS_DBACCESS(name)=1)
+        ELSE IF NOT EXISTS(SELECT 1 FROM sys.databases WHERE database_id=@ExpectedID AND database_id<>2
+            AND name<>N'SSISDB' AND is_distributor=0 AND state=0
+            AND source_database_id IS NULL AND HAS_DBACCESS(name)=1
+            AND ISNULL(sys.fn_hadr_is_primary_replica(name),1)=1)
             SELECT @Status='DATABASE_UNAVAILABLE',@GateReason='DATABASE_UNAVAILABLE',
-                   @Error=51063,@Message=N'Database is no longer online and accessible; remaining work was skipped.';
+                   @Error=51063,@Message=N'Database is unavailable, unsupported, or no longer hosted on the local primary replica; remaining work was skipped.';
         ELSE SELECT @Status='ALLOWED',@GateReason='SCOPE_ALLOWED',@CanProcess=1;
     END TRY
     BEGIN CATCH

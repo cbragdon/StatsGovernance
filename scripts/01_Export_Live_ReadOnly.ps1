@@ -1,5 +1,6 @@
 param(
-    [string]$Server = 'localhost'
+    [string]$Server = 'localhost',
+    [string]$Database = 'DBAdmin'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -13,14 +14,14 @@ $inventorySql = Join-Path $PSScriptRoot '00_ReadOnly_Live_Inventory.sql'
 $inventoryOutput = Join-Path $outputRoot 'inventory.txt'
 
 # Windows Authentication only. The source script consists of read-only metadata queries.
-& sqlcmd -S $Server -E -C -I -d DBAdmin -b -l 15 -w 65535 -y 0 -Y 0 -i $inventorySql -o $inventoryOutput
+& sqlcmd -S $Server -E -C -I -d $Database -b -l 15 -w 65535 -y 0 -Y 0 -i $inventorySql -o $inventoryOutput
 if ($LASTEXITCODE -ne 0) {
     throw "Read-only inventory failed. Inspect $inventoryOutput."
 }
 
 $builder = New-Object System.Data.SqlClient.SqlConnectionStringBuilder
 $builder['Data Source'] = $Server
-$builder['Initial Catalog'] = 'DBAdmin'
+$builder['Initial Catalog'] = $Database
 $builder['Integrated Security'] = $true
 $builder['Encrypt'] = $false
 $builder['TrustServerCertificate'] = $true

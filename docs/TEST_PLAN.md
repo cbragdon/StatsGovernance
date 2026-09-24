@@ -96,6 +96,19 @@ Verify skew does not independently force FULLSCAN.
 - USER_ONLY,
 - NON_AUTO.
 
+### Database selection
+
+- arbitrary caller-selected utility database,
+- SYSTEM_DATABASES resolves master, model, and msdb,
+- USER_DATABASES excludes system databases,
+- ALL includes supported system and user databases,
+- utility database excluded from group selectors,
+- tempdb rejected,
+- SSISDB rejected when present,
+- replication distribution database rejected when present,
+- local Always On secondary blocked,
+- primary-replica state revalidated before collection and enforcement.
+
 ### Index family
 
 - ROWSTORE,

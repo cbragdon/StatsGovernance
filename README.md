@@ -4,33 +4,28 @@ Integrated v1.3.2 source and qualification record for statistics maintenance in 
 
 ## Install
 
-Run `src/installer/Install_v1.3.2.sql` in SQLCMD mode with Windows Authentication:
+The automated installer requires the utility database name. For the local instance:
 
 ```powershell
-sqlcmd -S localhost -E -C -I -d DBAdmin -b -i D:\Projects\StatsGovernance\src\installer\Install_v1.3.2.sql
+powershell.exe -ExecutionPolicy Bypass -File D:\Projects\StatsGovernance\scripts\00_Install.ps1 `
+    -Server localhost `
+    -Database DBAdmin `
+    -TrustServerCertificate
 ```
 
-`-C` trusts the local server certificate, `-I` enables quoted identifiers, and `-b` returns a failing exit code when SQL Server reports an error. The installer is rerunnable.
+The wrapper uses Windows Authentication, passes the selected database to `sqlcmd -d`, enables quoted identifiers, and returns a failure when SQL Server reports an error. `-TrustServerCertificate` adds `-C` for a server certificate that the workstation does not trust. Omit that switch when normal certificate validation should apply.
 
 The selected utility database must already exist at compatibility level 110 or higher. An Ola-compatible `dbo.CommandLog` must also exist in that database. The installer validates that table and never changes it. It creates the governance objects described below and makes no instance-level changes or changes in target databases.
 
-### Use a different utility database
+### Direct SQLCMD installation
 
-The packaged v1.3.2 installer contains three `USE [DBAdmin];` directives. To deploy into another utility database, make a deployment copy of the installer, replace all three directives with the bracketed name of the chosen database, and run `sqlcmd` with that database in `-d`. Changing `-d` alone is insufficient because the `USE` directives take precedence.
-
-For example, for a utility database named `DBAUtility`, change each directive to:
-
-```sql
-USE [DBAUtility];
-```
-
-Then run:
+The SQL installer contains no `USE` statement. It installs into the connection's current database, so `-d` is the database selection mechanism:
 
 ```powershell
-sqlcmd -S localhost -E -C -I -d DBAUtility -b -i C:\Deployment\Install_v1.3.2_DBAUtility.sql
+sqlcmd -S localhost -E -C -I -d DBAUtility -b -i D:\Projects\StatsGovernance\src\installer\Install_v1.3.2.sql
 ```
 
-The installed procedures, functions, views, trigger, and governance tables use local two-part names, so they operate from the database where they are installed. Put the compatible `dbo.CommandLog` in that same database. Some v1.3.2 validation messages still use the name `DBAdmin`; for a custom installation, they refer to the chosen utility database. The repository's qualification scripts and the examples below use `DBAdmin`; substitute the chosen database in three-part names.
+The installed procedures, functions, views, trigger, and governance tables use local two-part names. Put the compatible `dbo.CommandLog` in the same utility database. The repository's examples use `DBAdmin`; substitute the chosen database in three-part names. The installer is rerunnable.
 
 ## What is installed in the utility database
 
@@ -63,6 +58,20 @@ The installer also creates the keys, indexes, defaults, and check constraints th
 
 `dbo.CommandLog` is a prerequisite rather than a project-owned object. Only `ENFORCE` writes to it, using one row per attempted statistic. The engine retains the inserted `CommandLog.ID` so completion and error details update the exact row.
 
+## Database selection and exclusions
+
+`@Databases` accepts a single database, a comma-separated list, or one of these group selectors:
+
+| Selector | Databases considered |
+| --- | --- |
+| `SYSTEM_DATABASES` | `master`, `model`, and `msdb`. Microsoft-shipped tables in these databases are included in statistics collection. |
+| `USER_DATABASES` | Supported user databases other than the utility database. |
+| `ALL` | Both groups above. |
+
+All group selectors omit the utility database, `tempdb`, `SSISDB`, replication distribution databases, snapshots, inaccessible or offline databases, and databases hosted on a local Always On secondary replica. Explicitly naming `tempdb`, `SSISDB`, or a distribution database is rejected. Explicitly naming an Always On secondary reports it as blocked. The engine calls `sys.fn_hadr_is_primary_replica` during selection and again before work so a role change cannot bypass the gate.
+
+System databases require the same explicit scope approval as user databases before `ENFORCE`. `OBSERVE` and `RECOMMEND` remain report-only.
+
 ## Examples
 
 Run these examples in the selected utility database as a `sysadmin`, outside an explicit transaction and with `IMPLICIT_TRANSACTIONS OFF`. The examples use `DBAdmin`; replace that qualifier when using another utility database.
@@ -94,7 +103,7 @@ EXEC DBAdmin.dbo.usp_DRE_StatsDatabaseSelection_v1
     @Databases = N'ALL';
 ```
 
-This read-only preview shows database accessibility, persistent exclusions, enforcement approval, and whether collection can proceed. `ALL` includes online, accessible, non-snapshot user databases and omits system databases and the utility database where the procedure runs.
+This read-only preview shows database accessibility, persistent exclusions, enforcement approval, and whether collection can proceed. `ALL` includes supported user databases plus `master`, `model`, and `msdb`, subject to the exclusions above.
 
 ### 4. Observe a database without proposing maintenance
 
@@ -178,8 +187,20 @@ ORDER BY DatabaseName, SchemaName, TableName, StatName;
 
 The results view flattens the useful fields from stored snapshots and decisions. Filtering by `RunID` prevents concurrent or historical runs from being mixed. Query `dbo.v_DRE_StatsDatabaseContext_v1` with the same `RunID` for captured version, compatibility, CE, and capability evidence.
 
-Start with `OBSERVE` or `RECOMMEND`. `ENFORCE` requires an enabled database scope approval and writes one CommandLog row per attempted statistic. The public main and targeted interfaces retain their ten and eight parameters, respectively. Default `@MAXDOP` is 4. See `docs/DESIGN_DECISIONS.md` for policy, `docs/PLATFORM_COMPATIBILITY.md` for the Microsoft-documentation review, `docs/QUALIFICATION_20260923.md` for tested behavior, and `docs/MANUAL_PLATFORM_VALIDATION.md` for testing on other instances.
+### 10. Observe supported system databases
+
+```sql
+EXEC DBAdmin.dbo.usp_DRE_StatsGovernance_v1
+    @Databases = N'SYSTEM_DATABASES',
+    @Mode = 'OBSERVE',
+    @MinRowCountFloor = 0,
+    @MaxExecutionTimeMinutes = 30;
+```
+
+This collects statistics context from `master`, `model`, and `msdb`, including their Microsoft-shipped tables. It does not include `tempdb`, `SSISDB`, a replication distribution database, or any local Always On secondary, and it performs no statistics maintenance in `OBSERVE` mode.
+
+Start with `OBSERVE` or `RECOMMEND`. `ENFORCE` requires an enabled database scope approval and writes one CommandLog row per attempted statistic. The public main and targeted interfaces retain their ten and eight parameters, respectively. Default `@MAXDOP` is 4. See `docs/DESIGN_DECISIONS.md` for policy, `docs/PLATFORM_COMPATIBILITY.md` for the Microsoft-documentation review, `docs/QUALIFICATION_20260923.md` and `docs/QUALIFICATION_20260924.md` for tested behavior, and `docs/MANUAL_PLATFORM_VALIDATION.md` for testing on other instances.
 
 ## Qualification boundary
 
-The integrated installer, report modes, policy gates, compatibility levels 110–170, CE 70, and controlled `ENFORCE` were exercised on local SQL Server 2025 CU8. Runtime testing on SQL Server 2016–2022 and Azure SQL Managed Instance still requires those target instances. Capability simulations cover their documented feature boundaries but do not replace runtime qualification.
+The integrated installer, arbitrary utility database context, report modes, system database collection, policy gates, compatibility levels 110–170, CE 70, and controlled `ENFORCE` were exercised on local SQL Server 2025 CU8. Runtime testing on SQL Server 2016–2022 and Azure SQL Managed Instance still requires those target instances. Capability simulations cover their documented feature boundaries but do not replace runtime qualification.

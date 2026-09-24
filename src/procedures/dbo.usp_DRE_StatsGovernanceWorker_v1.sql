@@ -35,7 +35,7 @@ BEGIN
         OR CONVERT(int,SERVERPROPERTY('EngineEdition')) NOT IN (2,3,4,8)
         THROW 51022, 'Unsupported engine/version for v1.', 1;
     IF (SELECT compatibility_level FROM sys.databases WHERE database_id=DB_ID())<110
-        THROW 51023, 'DBAdmin compatibility must be >= 110.', 1;
+        THROW 51023, 'The utility database compatibility level must be 110 or higher.', 1;
 
     DECLARE @Capabilities xml;
     EXEC dbo.usp_DRE_StatsCapabilities_v1 @CapabilitiesXml=@Capabilities OUTPUT,@EmitResult=0;
@@ -49,7 +49,7 @@ BEGIN
     IF @Mode IS NULL OR @Mode NOT IN ('OBSERVE','RECOMMEND','ENFORCE')
         THROW 51024, 'Mode must be OBSERVE, RECOMMEND, or ENFORCE.', 1;
     IF @Databases IS NULL OR LEN(@Databases)=0
-        THROW 51025, 'Specify one database, a comma-separated list, or ALL.', 1;
+        THROW 51025, 'Specify one database, a comma-separated list, ALL, SYSTEM_DATABASES, or USER_DATABASES.', 1;
     IF @StatisticsScope IS NULL OR @StatisticsScope NOT IN ('ALL','INDEX_ONLY','AUTO_ONLY','USER_ONLY','NON_AUTO')
         THROW 51120, 'StatisticsScope must be ALL, INDEX_ONLY, AUTO_ONLY, USER_ONLY, or NON_AUTO.', 1;
     IF @MAXDOP IS NULL OR @MAXDOP NOT BETWEEN 1 AND 64
@@ -104,14 +104,14 @@ BEGIN
     END;
     -- Excluded databases do not participate in target availability/approval checks.
     IF EXISTS(SELECT 1 FROM @DbList WHERE IsExcluded=0 AND ReadyForCollection=0)
-        THROW 51033, 'Non-excluded selections must be online, accessible, non-snapshot user databases.', 1;
+        THROW 51033, 'Non-excluded selections must be online, accessible, non-snapshot supported databases.', 1;
     DECLARE @SelectedDatabaseCount int=(SELECT COUNT(*) FROM @DbList WHERE IsExcluded=0),
             @InitialExcludedDatabaseCount int=(SELECT COUNT(*) FROM @DbList WHERE IsExcluded=1);
 
     IF @Mode='ENFORCE' AND @SelectedDatabaseCount>0
     BEGIN
         IF OBJECT_ID(N'dbo.CommandLog',N'U') IS NULL
-            THROW 51034, 'Install the standard Ola Hallengren dbo.CommandLog table in DBAdmin before ENFORCE.', 1;
+            THROW 51034, 'Install the standard Ola Hallengren dbo.CommandLog table in the utility database before ENFORCE.', 1;
         -- Check standard column types without changing the table.
         IF EXISTS
         (

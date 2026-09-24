@@ -1,6 +1,5 @@
 /* Canonical v1.3.2 table bootstrap. Generated from the captured live 1.3.0 schema.
    Existing tables are never altered here; run contract checks before modules. */
-USE [DBAdmin];
 SET ANSI_NULLS ON;
 SET QUOTED_IDENTIFIER ON;
 GO

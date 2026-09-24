@@ -1,5 +1,6 @@
 param(
-    [string]$Server = 'localhost'
+    [string]$Server = 'localhost',
+    [string]$Database = 'DBAdmin'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -13,7 +14,7 @@ foreach ($path in @($pending, $running, $completed)) {
 }
 
 $readyFile = Join-Path $queueRoot 'runner_ready.txt'
-[System.IO.File]::WriteAllText($readyFile, "Started UTC: $((Get-Date).ToUniversalTime().ToString('o'))`r`nServer: $Server`r`nWindows Authentication`r`n")
+[System.IO.File]::WriteAllText($readyFile, "Started UTC: $((Get-Date).ToUniversalTime().ToString('o'))`r`nServer: $Server`r`nDatabase: $Database`r`nWindows Authentication`r`n")
 Write-Output "SQL runner ready. Queue: $pending"
 Write-Output 'Leave this PowerShell window open while project work continues. Create artifacts\sql_queue\STOP to end it.'
 
@@ -41,7 +42,7 @@ while (-not (Test-Path -LiteralPath (Join-Path $queueRoot 'STOP'))) {
     $statusPath = Join-Path $resultPath 'status.json'
     Write-Output "Running $($job.Name)"
     $startUtc = (Get-Date).ToUniversalTime()
-    & sqlcmd -S $Server -E -C -I -d DBAdmin -b -r 1 -l 15 -w 65535 -y 0 -Y 0 -i $runPath -o $outputPath 2> $errorPath
+    & sqlcmd -S $Server -E -C -I -d $Database -b -r 1 -l 15 -w 65535 -y 0 -Y 0 -i $runPath -o $outputPath 2> $errorPath
     $exitCode = $LASTEXITCODE
     $status = [pscustomobject]@{
         File = $job.Name

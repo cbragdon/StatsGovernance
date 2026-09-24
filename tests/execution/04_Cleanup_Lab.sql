@@ -1,4 +1,3 @@
-USE [DBAdmin];
 SET NOCOUNT ON;
 SET XACT_ABORT ON;
 
@@ -27,13 +26,12 @@ WHERE DatabaseName=N'AdventureWorks2019'
   AND Notes=N'Controlled v1.3.2 qualification complete; remove temporary approval.';
 IF @@ROWCOUNT<>1 THROW 51442,'Expected to remove one temporary lab scope row.',1;
 
-USE [AdventureWorks2019];
-IF OBJECT_ID(N'DREStatsLab.StatsGovV132Qualification',N'U') IS NULL
+IF OBJECT_ID(N'AdventureWorks2019.DREStatsLab.StatsGovV132Qualification',N'U') IS NULL
     THROW 51443,'Lab table missing; inspect before cleanup.',1;
+EXEC AdventureWorks2019.sys.sp_executesql N'
 DROP TABLE DREStatsLab.StatsGovV132Qualification;
-IF SCHEMA_ID(N'DREStatsLab') IS NOT NULL EXEC(N'DROP SCHEMA DREStatsLab;');
+IF SCHEMA_ID(N''DREStatsLab'') IS NOT NULL EXEC(N''DROP SCHEMA DREStatsLab;'');';
 
-USE [DBAdmin];
 IF (SELECT MinUpdateIntervalMinutes FROM dbo.StatsGovernanceSettings WHERE SettingsID=1)<>60
     THROW 51444,'Cooldown restoration failed.',1;
 IF EXISTS(SELECT 1 FROM dbo.StatsGovernanceScope WHERE DatabaseName=N'AdventureWorks2019')

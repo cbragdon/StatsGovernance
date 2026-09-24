@@ -1,4 +1,3 @@
-USE [DBAdmin];
 SET NOCOUNT ON;
 
 IF (SELECT COUNT(*) FROM sys.objects

@@ -65,6 +65,20 @@ Runtime qualification on SQL Server 2016–2022 and Azure SQL Managed Instance i
 
 The subsequent platform-documentation audit expanded the build-boundary tests and replaced the collector's boxed SQL Server AG function with `DATABASEPROPERTYEX(..., 'Updateability')`, which Microsoft documents for both SQL Server and Managed Instance replicas. It also made Managed Instance CE feedback support policy-dependent by probing the scoped setting. The audited behavior and sources are in `PLATFORM_COMPATIBILITY.md`.
 
+## v1.3.2 portability and database-selection update — 2026-09-24
+
+- Removed every hardcoded `USE [DBAdmin]` from the installer and executable utility scripts.
+- Added `scripts/00_Install.ps1` with a required utility database argument.
+- Parameterized the inventory exporter and local SQL runner database.
+- Added `SYSTEM_DATABASES` and `USER_DATABASES`; `ALL` now includes supported system and user databases.
+- Included Microsoft-shipped tables when collecting `master`, `model`, and `msdb`.
+- Excluded `tempdb`, `SSISDB`, and replication distribution databases.
+- Added selection and last-moment gates for local Always On secondary replicas.
+- Added database-selection contracts and a system-database report-only smoke test.
+- Verified a fresh install in an arbitrarily named disposable utility database and reran the policy, compatibility-level 110–170, CE 70, and context-independent lab tests.
+
+No new `ENFORCE` test was run for this update. The prior dedicated-lab execution evidence remains the current enforcement qualification.
+
 ## Original v1.3.2 objective
 
 Produce one integrated release containing:

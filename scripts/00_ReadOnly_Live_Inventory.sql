@@ -3,20 +3,19 @@
   Codex Handoff - Read-Only Live Inventory
 
   Target instance: DESKTOP-6BVBI90
-  Starting database: DBAdmin
+  Starting database: supplied by the caller
 
   This script performs metadata SELECTs only.
   It does not execute maintenance, DDL, configuration DML, or CommandLog DML.
 */
 
-USE [DBAdmin];
 SET NOCOUNT ON;
 SET XACT_ABORT OFF;
 SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
 
 DECLARE
     @TargetDb sysname = N'AdventureWorks2019',
-    @AdminDb sysname = N'DBAdmin',
+    @AdminDb sysname = DB_NAME(),
     @LabSchema sysname = N'DREStatsLab',
     @LabTable sysname = N'StatsEnforceQualification';
 

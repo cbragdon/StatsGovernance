@@ -1,10 +1,9 @@
-USE [master];
 SET NOCOUNT ON;
 IF DB_ID(N'StatsGovCompatLabV132') IS NOT NULL
     THROW 51450,'Compatibility lab database already exists; inspect it before rerun.',1;
 CREATE DATABASE [StatsGovCompatLabV132];
 GO
-USE [StatsGovCompatLabV132];
+EXEC StatsGovCompatLabV132.sys.sp_executesql N'
 CREATE TABLE dbo.CompatProbe(ID int NOT NULL PRIMARY KEY, GroupKey int NOT NULL);
 ;WITH n AS
 (
@@ -13,9 +12,8 @@ CREATE TABLE dbo.CompatProbe(ID int NOT NULL PRIMARY KEY, GroupKey int NOT NULL)
 )
 INSERT dbo.CompatProbe(ID,GroupKey)
 SELECT CONVERT(int,ID),CONVERT(int,ID%20) FROM n;
-CREATE STATISTICS ST_CompatProbe_GroupKey ON dbo.CompatProbe(GroupKey);
+CREATE STATISTICS ST_CompatProbe_GroupKey ON dbo.CompatProbe(GroupKey);';
 GO
-USE [DBAdmin];
 SET NOCOUNT ON;
 DECLARE @Levels TABLE(LevelValue int NOT NULL PRIMARY KEY);
 INSERT @Levels(LevelValue) VALUES(110),(120),(130),(140),(150),(160),(170);
@@ -51,10 +49,9 @@ END;
 CLOSE levels;
 DEALLOCATE levels;
 GO
-USE [StatsGovCompatLabV132];
-ALTER DATABASE SCOPED CONFIGURATION SET LEGACY_CARDINALITY_ESTIMATION = ON;
+EXEC StatsGovCompatLabV132.sys.sp_executesql
+    N'ALTER DATABASE SCOPED CONFIGURATION SET LEGACY_CARDINALITY_ESTIMATION = ON;';
 GO
-USE [DBAdmin];
 SET NOCOUNT ON;
 DECLARE @StartUTC datetime2(7)=SYSUTCDATETIME(),@RunID uniqueidentifier;
 EXEC dbo.usp_DRE_StatsGovernanceTargeted_v1

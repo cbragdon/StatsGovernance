@@ -1,4 +1,3 @@
-USE [DBAdmin];
 SET NOCOUNT ON;
 SET QUOTED_IDENTIFIER ON;
 SET XACT_ABORT ON;
@@ -13,14 +12,13 @@ IF EXISTS(SELECT 1 FROM dbo.StatsGovernanceOverrides
             AND TableName=N'StatsGovV132Qualification')
     THROW 51402,'Lab override rows already exist; inspect them before setup.',1;
 
-USE [AdventureWorks2019];
-IF SCHEMA_ID(N'DREStatsLab') IS NOT NULL
+IF EXISTS(SELECT 1 FROM AdventureWorks2019.sys.schemas WHERE name=N'DREStatsLab')
     THROW 51404,'The DREStatsLab schema already exists; inspect it before setup.',1;
-IF OBJECT_ID(N'DREStatsLab.StatsGovV132Qualification',N'U') IS NOT NULL
+IF OBJECT_ID(N'AdventureWorks2019.DREStatsLab.StatsGovV132Qualification',N'U') IS NOT NULL
     THROW 51400,'The v1.3.2 qualification table already exists. Inspect it before setup.',1;
 
-EXEC(N'CREATE SCHEMA DREStatsLab AUTHORIZATION dbo;');
-
+EXEC AdventureWorks2019.sys.sp_executesql N'CREATE SCHEMA DREStatsLab AUTHORIZATION dbo;';
+EXEC AdventureWorks2019.sys.sp_executesql N'
 CREATE TABLE DREStatsLab.StatsGovV132Qualification
 (
     ID int NOT NULL CONSTRAINT PK_StatsGovV132Qualification PRIMARY KEY CLUSTERED,
@@ -47,14 +45,13 @@ UPDATE DREStatsLab.StatsGovV132Qualification
 SET GroupKey=GroupKey+1,Metric=Metric+1
 WHERE ID<=5000;
 
-SELECT N'LAB_STATS_BEFORE' AS Section,s.name,sp.rows,sp.rows_sampled,
+SELECT N''LAB_STATS_BEFORE'' AS Section,s.name,sp.rows,sp.rows_sampled,
        sp.modification_counter,sp.persisted_sample_percent
 FROM sys.stats AS s
 OUTER APPLY sys.dm_db_stats_properties(s.object_id,s.stats_id) AS sp
-WHERE s.object_id=OBJECT_ID(N'DREStatsLab.StatsGovV132Qualification')
-ORDER BY s.stats_id;
+WHERE s.object_id=OBJECT_ID(N''DREStatsLab.StatsGovV132Qualification'')
+ORDER BY s.stats_id;';
 
-USE [DBAdmin];
 UPDATE dbo.StatsGovernanceSettings
 SET MinUpdateIntervalMinutes=0 WHERE SettingsID=1;
 

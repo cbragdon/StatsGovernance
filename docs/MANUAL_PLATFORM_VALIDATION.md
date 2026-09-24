@@ -11,21 +11,22 @@ SELECT @@SERVERNAME AS ServerName,
        CONVERT(nvarchar(128),SERVERPROPERTY('ProductVersion')) AS ProductVersion,
        CONVERT(int,SERVERPROPERTY('EngineEdition')) AS EngineEdition,
        CONVERT(nvarchar(128),SERVERPROPERTY('ProductUpdateType')) AS ProductUpdateType;
-SELECT name,compatibility_level,collation_name,state_desc,is_read_only
-FROM sys.databases WHERE name IN (N'DBAdmin',N'AdventureWorks2019');
+SELECT name,compatibility_level,collation_name,state_desc,is_read_only,is_distributor,
+       sys.fn_hadr_is_primary_replica(name) AS IsLocalPrimaryReplica
+FROM sys.databases;
 ```
 
 Managed Instance reports `EngineEdition = 8`. Its reported `ProductVersion` may begin with `12` and does not define the SQL Server feature level. Record the Azure update policy from the portal as well: `ProductUpdateType = CU` does not distinguish the 2022 and 2025 policies.
 
 ## 2. Install and check contracts
 
-Prerequisites: `DBAdmin` exists, compatibility level is at least 110, and its existing Ola-compatible `dbo.CommandLog` is present. The installer checks this table and does not alter it. Run the canonical `src/installer/Install_v1.3.2.sql` with SQLCMD error exit enabled. Example for Windows Authentication:
+Prerequisites: the selected utility database exists, its compatibility level is at least 110, and its existing Ola-compatible `dbo.CommandLog` is present. The installer checks this table and does not alter it. The installer contains no `USE` statement and installs into the connection database selected with `-d`. Example for Windows Authentication:
 
 ```powershell
-sqlcmd -S <server> -E -I -d DBAdmin -b -i D:\Projects\StatsGovernance\src\installer\Install_v1.3.2.sql -o install.txt
+powershell.exe -ExecutionPolicy Bypass -File D:\Projects\StatsGovernance\scripts\00_Install.ps1 -Server <server> -Database <utility_database>
 ```
 
-For the local self-signed certificate, add `-C`; use the connection and authentication method required by the target environment. A successful install prints `TABLE_CONTRACT_PASS` and `STATS_GOVERNANCE_V1_3_2_INSTALL_COMPLETE`. Then run `tests/contract/01_Tables.sql` and `tests/contract/02_Modules.sql` with the same SQLCMD options; both must exit zero and print their `*_PASS` markers. Re-run the installer once to check idempotence.
+For a self-signed certificate, add `-TrustServerCertificate`; use the connection and authentication method required by the target environment. A successful install prints `TABLE_CONTRACT_PASS` and `STATS_GOVERNANCE_V1_3_2_INSTALL_COMPLETE`. Then run `tests/contract/01_Tables.sql`, `02_Modules.sql`, and `03_Database_Selection.sql` with `sqlcmd -d <utility_database>`; all must exit zero and print their `*_PASS` markers. Re-run the installer once to check idempotence.
 
 ## 3. Run read-only and policy checks
 
@@ -34,10 +35,12 @@ Run `tests/policy/02_Decision_Matrix.sql` and `tests/policy/03_Capability_Matrix
 Check the target's actual capability report:
 
 ```sql
-EXEC DBAdmin.dbo.usp_DRE_StatsCapabilities_v1;
+EXEC <utility_database>.dbo.usp_DRE_StatsCapabilities_v1;
 ```
 
 On SQL Server 2016 before SP2, or SQL Server 2017 before CU3, `SupportsStatisticsMAXDOP = 0` is expected. The engine reports a blocked capability for enforcement because its required `MAXDOP` clause is unavailable; do not treat that as a failed installation. The build boundaries and source links are in `PLATFORM_COMPATIBILITY.md`.
+
+Run `tests/policy/04_System_Database_Smoke.sql` to verify report-only collection for `master`, `model`, and `msdb`. Confirm that `tempdb`, `SSISDB`, replication distribution databases, and local Always On secondary replicas do not appear in the run. On an Always On target, also name a local secondary explicitly in `usp_DRE_StatsDatabaseSelection_v1` and confirm `IsLocalPrimary = 0`, `SelectionStatus = BLOCKED_SECONDARY`, and `WillCollect = 0`.
 
 ## 4. Controlled execution
 

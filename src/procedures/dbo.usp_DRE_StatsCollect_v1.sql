@@ -198,7 +198,7 @@ BEGIN
                          ELSE ''500 + (0.20 * n)'' END AS AutoUpdateThresholdFormula
             ) AS nt
             '+@HistogramApply+N'
-            WHERE t.is_ms_shipped=0 AND t.is_external=0
+            WHERE (t.is_ms_shipped=0 OR DB_ID() IN (1,3,4)) AND t.is_external=0
               AND (@OID IS NULL OR s.object_id=@OID) AND (@SID IS NULL OR s.stats_id=@SID)
               AND (NOT EXISTS(SELECT 1 FROM @Targets) OR EXISTS(SELECT 1 FROM @Targets q WHERE q.SchemaName=sch.name AND q.TableName=t.name))
               AND (@Scope=''ALL'' OR (@Scope=''INDEX_ONLY'' AND i.index_id IS NOT NULL)

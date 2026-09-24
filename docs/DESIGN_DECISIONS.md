@@ -103,14 +103,32 @@ MAXDOP is not a spill cure. It is an execution-resource control and version/buil
 Database:
 
 ```text
-DBAdmin
+The caller-selected utility database; DBAdmin is the project default.
 ```
-
-Never rename to `AdminDB`.
 
 Do not modify the existing CommandLog table schema.
 
 Report-only modes must not insert CommandLog rows.
+
+## Utility database context
+
+The installer contains no `USE` statement. The automation supplies the utility database as the connection's initial catalog, and every project-owned object uses local two-part names.
+
+The chosen database must already exist at compatibility level 110 or higher and contain the compatible `dbo.CommandLog` prerequisite.
+
+## Database groups and exclusions
+
+Supported group selectors:
+
+```text
+SYSTEM_DATABASES = master, model, msdb
+USER_DATABASES   = supported databases with database_id > 4
+ALL              = both groups
+```
+
+All groups exclude the current utility database, `tempdb`, `SSISDB`, replication distribution databases, snapshots, unavailable databases, and databases hosted on a local Always On secondary replica.
+
+Explicit lists also reject `tempdb`, `SSISDB`, and distribution databases. A named local secondary is visible in selection output but is not ready for collection. The primary-replica gate is repeated immediately before work.
 
 ## Maintenance window
 

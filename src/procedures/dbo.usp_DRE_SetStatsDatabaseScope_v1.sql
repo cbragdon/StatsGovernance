@@ -24,8 +24,11 @@ BEGIN
         @NewExcluded bit,@NewEnabled bit,@ApprovedBy sysname,@ApprovedAt datetime2(7),
         @ExcludedBy sysname,@ExcludedAt datetime2(7),@ExclusionReason nvarchar(2000),
         @Now datetime2(7)=SYSUTCDATETIME(),@LockResult int,@ScopeXml xml;
-    SELECT @CanonicalName=name FROM sys.databases WHERE database_id=@DatabaseID AND database_id>4 AND source_database_id IS NULL;
-    IF @CanonicalName IS NULL THROW 51057,'Configure an existing, non-snapshot user database. DBAdmin may be explicitly configured.',1;
+    SELECT @CanonicalName=name FROM sys.databases
+    WHERE database_id=@DatabaseID AND database_id<>2 AND name<>N'SSISDB'
+      AND is_distributor=0 AND source_database_id IS NULL;
+    IF @CanonicalName IS NULL
+        THROW 51057,'Configure an existing, non-snapshot supported database. tempdb, SSISDB, and replication distribution databases are excluded.',1;
     BEGIN TRY
         BEGIN TRANSACTION;
         EXEC @LockResult=sys.sp_getapplock @Resource=N'DRE.StatsGovernance.v1.SCOPE_CONFIGURATION',
