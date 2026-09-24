@@ -2,7 +2,7 @@
   "project": "SQL Server Statistics Governance Engine",
   "version": "1.3.2",
   "root": "D:\\Projects\\StatsGovernance",
-  "generatedUTC": "2026-09-23T23:14:26.6456981Z",
+  "generatedUTC": "2026-09-24T00:38:23.4168637Z",
   "files": [
     {
       "path": "AGENTS.md",
@@ -71,8 +71,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "9a8e4a890f55420eb046c9d708ff0eb74d26f908c2b46665fd2f671b122e0016",
-      "size": 1956
+      "sha256": "e83a656dd4e0df922d106208ba17a5a84bcfee9b31b1f315c32aec7b2b456448",
+      "size": 11333
     },
     {
       "path": "scripts/00_ReadOnly_Live_Inventory.sql",
