@@ -2,7 +2,7 @@
   "project": "SQL Server Statistics Governance Engine",
   "version": "1.3.2",
   "root": "D:\\Projects\\StatsGovernance",
-  "generatedUTC": "2026-09-24T18:09:28.8204187Z",
+  "generatedUTC": "2026-09-24T18:24:03.3179310Z",
   "files": [
     {
       "path": "AGENTS.md",
@@ -76,8 +76,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "ff27d95a0ae939f3d52d5664d9e634e23283ed84c221219cc9e736fefee68b73",
-      "size": 13021
+      "sha256": "6bfda9d24b995057bfaacd257278980fb043ec1fe359280525aea3041dba8de5",
+      "size": 13795
     },
     {
       "path": "scripts/00_Install.ps1",

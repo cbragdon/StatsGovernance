@@ -1,5 +1,7 @@
 # SQL Server Statistics Governance Engine
 
+This project gives a DBA a safe, centralized way to manage SQL Server statistics across multiple databases. It examines how current each statistic is, considers table changes, sampling history, compatibility level, and platform capabilities, then decides whether an update is needed and how it should be performed. A DBA can use it simply to observe the environment, review recommendations, or execute approved maintenance. It keeps the process controlled by requiring explicit approvals, avoiding unsupported databases and Always On secondaries, and recording every executed command and result. In practical terms, it helps maintain reliable query plans while giving the DBA clear oversight, audit history, and protection against overly aggressive statistics maintenance.
+
 Integrated v1.3.2 source and qualification record for statistics maintenance in SQL Server. A utility database houses the engine while target databases remain separate. This project uses `DBAdmin` as its default and qualification database, but an end user can choose another existing user database. The engine records observations, recommends per-statistic commands, and executes approved maintenance only in `ENFORCE` mode.
 
 ## Install
